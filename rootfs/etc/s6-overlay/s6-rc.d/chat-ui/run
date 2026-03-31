@@ -1,0 +1,17 @@
+#!/command/with-contenv sh
+set -eu
+
+export DATABASE_PATH="${DATABASE_PATH:-/data/chat-ui/sqlite.db}"
+export COPILOT_URL="${COPILOT_URL:-http://127.0.0.1:8123}"
+export CODE_EXECUTOR_URL="${CODE_EXECUTOR_URL:-http://127.0.0.1:8888}"
+export WOT_API_URL="${WOT_API_URL:-http://127.0.0.1:8000/api}"
+export NEXT_TELEMETRY_DISABLED="${NEXT_TELEMETRY_DISABLED:-1}"
+export WOT_REGISTRY_TOKEN="${WOT_REGISTRY_TOKEN:-${INIT_ADMIN_TOKEN:-}}"
+
+/usr/local/bin/wait-for-http "http://127.0.0.1:8000/health" "wot-registry"
+/usr/local/bin/wait-for-http "http://127.0.0.1:8888/health" "code-executor"
+/usr/local/bin/wait-for-http "http://127.0.0.1:8123/health" "copilot"
+
+cd /app/chat-ui
+/usr/local/bin/node scripts/ensure-db.mjs
+exec /usr/local/bin/node node_modules/next/dist/bin/next start --hostname 0.0.0.0 --port 3000

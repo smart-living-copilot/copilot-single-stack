@@ -1,0 +1,14 @@
+#!/command/with-contenv sh
+set -eu
+
+export HOST="${HOST:-127.0.0.1}"
+export PORT="${PORT:-3003}"
+export REGISTRY_URL="${REGISTRY_URL:-http://127.0.0.1:8000}"
+export REDIS_URL="${REDIS_URL:-redis://127.0.0.1:6379}"
+export WOT_RUNTIME_STREAM="${WOT_RUNTIME_STREAM:-wot_runtime_events}"
+export WOT_RUNTIME_NODE_BIN="${WOT_RUNTIME_NODE_BIN:-/usr/local/bin/node-wot-runtime}"
+
+/usr/local/bin/wait-for-http "http://127.0.0.1:8000/health" "wot-registry"
+
+cd /app/wot-registry/wot_runtime
+exec "$WOT_RUNTIME_NODE_BIN" dist/index.js

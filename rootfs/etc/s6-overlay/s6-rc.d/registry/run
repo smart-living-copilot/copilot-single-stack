@@ -1,0 +1,7 @@
+#!/command/with-contenv sh
+export REGISTRY_DATABASE_URL="${REGISTRY_DATABASE_URL:-sqlite:////data/registry/wot_registry.db}"
+export REGISTRY_PUBLIC_URL="${REGISTRY_PUBLIC_URL:-http://localhost:8000}"
+export REDIS_URL="${REDIS_URL:-redis://127.0.0.1:6379}"
+export WOT_RUNTIME_URL="${WOT_RUNTIME_URL:-http://127.0.0.1:3003}"
+export SEARCH_VECTOR_STORE_DIR="${SEARCH_VECTOR_STORE_DIR:-/data/registry/search-index}"
+exec /opt/wot-registry-venv/bin/uvicorn wot_registry.app:app --app-dir /app/wot-registry/backend/src --host 127.0.0.1 --port 8000

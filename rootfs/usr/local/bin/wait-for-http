@@ -1,0 +1,28 @@
+#!/bin/sh
+set -eu
+
+url="${1:?url is required}"
+name="${2:-$url}"
+max_attempts="${WAIT_FOR_HTTP_ATTEMPTS:-60}"
+sleep_seconds="${WAIT_FOR_HTTP_INTERVAL_SECONDS:-1}"
+attempt=1
+
+while [ "$attempt" -le "$max_attempts" ]; do
+  if python3 - "$url" <<'PY' >/dev/null 2>&1
+import sys
+import urllib.request
+
+with urllib.request.urlopen(sys.argv[1], timeout=5):
+    pass
+PY
+  then
+    exit 0
+  fi
+
+  echo "Waiting for ${name} at ${url} (${attempt}/${max_attempts})" >&2
+  attempt=$((attempt + 1))
+  sleep "$sleep_seconds"
+done
+
+echo "Timed out waiting for ${name} at ${url}" >&2
+exit 1

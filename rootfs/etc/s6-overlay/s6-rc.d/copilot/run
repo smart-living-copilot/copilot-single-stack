@@ -1,0 +1,16 @@
+#!/command/with-contenv sh
+set -eu
+
+if [ -n "${OPENAI_API_BASE_URL:-}" ] && [ -z "${OPENAI_BASE_URL:-}" ]; then
+  export OPENAI_BASE_URL="${OPENAI_API_BASE_URL}"
+fi
+
+export WOT_REGISTRY_URL="${COPILOT_WOT_REGISTRY_URL:-http://127.0.0.1:8000/mcp}"
+export WOT_REGISTRY_TOKEN="${WOT_REGISTRY_TOKEN:-${INIT_ADMIN_TOKEN:-}}"
+export CODE_EXECUTOR_URL="${CODE_EXECUTOR_URL:-http://127.0.0.1:8888}"
+export AGENT_STATE_DB_PATH="${AGENT_STATE_DB_PATH:-/data/copilot/agent_state.db}"
+
+/usr/local/bin/wait-for-http "http://127.0.0.1:8000/health" "wot-registry"
+/usr/local/bin/wait-for-http "http://127.0.0.1:8888/health" "code-executor"
+
+exec /opt/copilot-venv/bin/uvicorn copilot.server:app --host 127.0.0.1 --port 8123

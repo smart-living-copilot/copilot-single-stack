@@ -1,0 +1,6 @@
+[submodule "upstream/copilot"]
+	path = upstream/copilot
+	url = https://github.com/smart-living-copilot/copilot.git
+[submodule "upstream/wot-registry"]
+	path = upstream/wot-registry
+	url = https://github.com/smart-living-copilot/wot-registry.git

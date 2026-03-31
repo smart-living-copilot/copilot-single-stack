@@ -1,0 +1,10 @@
+#!/command/with-contenv sh
+set -eu
+
+export ARTIFACTS_DIR="${ARTIFACTS_DIR:-/tmp/code-executor-artifacts}"
+export WOT_REGISTRY_URL="${CODE_EXECUTOR_WOT_REGISTRY_URL:-http://127.0.0.1:8000}"
+export WOT_REGISTRY_TOKEN="${WOT_REGISTRY_TOKEN:-${INIT_ADMIN_TOKEN:-}}"
+
+/usr/local/bin/wait-for-http "http://127.0.0.1:8000/health" "wot-registry"
+
+exec /opt/code-executor-venv/bin/uvicorn code_executor.api:app --host 127.0.0.1 --port 8888

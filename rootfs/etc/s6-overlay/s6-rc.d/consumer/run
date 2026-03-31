@@ -1,0 +1,8 @@
+#!/command/with-contenv sh
+export REDIS_URL="${REDIS_URL:-redis://127.0.0.1:6379}"
+export REGISTRY_DATABASE_URL="${REGISTRY_DATABASE_URL:-sqlite:////data/registry/wot_registry.db}"
+export REGISTRY_PUBLIC_URL="${REGISTRY_PUBLIC_URL:-http://localhost:8000}"
+export WOT_RUNTIME_URL="${WOT_RUNTIME_URL:-http://127.0.0.1:3003}"
+export SEARCH_VECTOR_STORE_DIR="${SEARCH_VECTOR_STORE_DIR:-/data/registry/search-index}"
+export PYTHONPATH=/app/wot-registry/backend/src
+exec /opt/wot-registry-venv/bin/python /app/wot-registry/backend/src/wot_registry/search_indexer/main.py

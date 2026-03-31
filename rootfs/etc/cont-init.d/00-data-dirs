@@ -1,0 +1,7 @@
+#!/command/with-contenv sh
+mkdir -p \
+  /data/chat-ui \
+  /data/copilot \
+  /data/registry/search-index \
+  /data/valkey \
+  /tmp/code-executor-artifacts
