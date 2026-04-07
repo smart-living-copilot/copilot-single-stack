@@ -13,5 +13,4 @@ export WOT_REGISTRY_TOKEN="${WOT_REGISTRY_TOKEN:-${INIT_ADMIN_TOKEN:-}}"
 /usr/local/bin/wait-for-http "http://127.0.0.1:8123/health" "copilot"
 
 cd /app/chat-ui
-/usr/local/bin/node scripts/ensure-db.mjs
 exec /usr/local/bin/node node_modules/next/dist/bin/next start --hostname 0.0.0.0 --port 3000
